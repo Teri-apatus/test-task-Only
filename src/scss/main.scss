@@ -1,5 +1,5 @@
 @use 'base/reset';
-@use 'base/base';
+@use 'base/base' as *;
 
 .time-events-widget {
     overflow: hidden;
@@ -9,18 +9,18 @@
     width: 1440px;
     height: 1080px;
     box-sizing: border-box;
-    border-left: 1px solid #42567a1a;
-    border-right: 1px solid #42567a1a;
+    border-left: 1px solid $color-primary-transparent;
+    border-right: 1px solid $color-primary-transparent;
 }
 
 .time-events-widget::before {
     content: '';
     position: absolute;
-    top: 44.3%;
+    top: 44.44%;
     left: 0;
     right: 0;
     height: 1px;
-    background-color: #42567a1a;
+    background-color: $color-primary-transparent;
 }
 
 .time-events-widget::after {
@@ -30,17 +30,16 @@
     top: 0;
     bottom: 0;
     width: 1px;
-    background-color: #42567a1a;
+    background-color: $color-primary-transparent;
 }
 
 .time-events-widget__header {
-    position: relative;
+    position: absolute;
     box-sizing: border-box;
-    margin-top: 169px;
-    margin-bottom: 34px;
-    padding-left: 79px;
+    padding-left: 81px;
     width: 433px;
     height: 134px;
+    top: 170px;
 }
 
 .time-events-widget__header::before {
@@ -48,7 +47,7 @@
     position: absolute;
     width: 5px;
     height: 120px;
-    top: 7px;
+    top: 8px;
     left: 0;
     background-image: linear-gradient(#3877ee, #ef5da8);
 }
@@ -56,122 +55,109 @@
 .time-events-widget__title {
     font-weight: bold;
     font-size: 56px;
-    color: #42567a;
+    color: $color-primary;
     line-height: 1.2;
 }
 
-.time-events-widget__time-segments-carousel {
+.time-events-widget__carousel.swiper {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
     width: 100%;
+    height: 100%;
 }
 
 .time-events-widget__years {
+    position: absolute;
     display: flex;
     justify-content: center;
     gap: 93px;
     font-weight: bold;
     font-size: 200px;
-    padding-right: 37px;
+    margin-right: 34px;
     letter-spacing: -0.02em;
+    top: 339px;
 }
 
 .time-events-widget__year-start {
-    color: #5d5fef;
+    color: $color-year-start;
 }
 
 .time-events-widget__year-end {
-    color: #ef5da8;
+    color: $color-year-end;
 }
 
 .time-events-widget__circle {
+    position: relative;
     box-sizing: border-box;
-    position: absolute;
-    bottom: 39px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 530px;
-    height: 530px;
+    width: var(--circle-diameter);
+    height: var(--circle-diameter);
     border-radius: 50%;
     border: 1px solid #42567a33;
+    z-index: 1;
 }
 
 .time-events-widget__circle-button {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    color: #42567a;
-    border-radius: 50%;
-    border: 1px solid #42567a;
-    background-color: #42567a;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-    transition: background-color 0.4s ease, width 0.4s ease,
-        height 0.4s ease, border-color 0.4s ease,
-        overflow 0.2s ease 0.2s;
-}
-
-.time-events-widget__circle-button:hover {
-    width: 56px;
-    height: 56px;
-    background-color: #f4f5f9;
     font-size: 20px;
-    overflow: visible;
+    position: absolute;
+    width: var(--circle-button-diameter-small);
+    height: var(--circle-button-diameter-small);
+    color: $color-primary;
+    border-radius: 50%;
+    border: 1px solid #303e5880;
+    background-color: $color-primary;
+    transform: translate(-50%, -50%);
+    transition: all calc(var(--animation-duration) / 2) ease;
+
+    &:hover,
+    &--active {
+        width: var(--circle-button-diameter-large);
+        height: var(--circle-button-diameter-large);
+        opacity: 1;
+        background-color: $color-background-light;
+
+        .time-events-widget__circle-button-number {
+            clip-path: circle(28px);
+        }
+    }
+
+    &--active {
+        .time-events-widget__circle-button-label {
+            transition: opacity 0.1s ease var(--animation-duration);
+            opacity: 1;
+        }
+    }
 }
 
-.time-events-widget__circle-button:hover
-    .time-events-widget__circle-button-number {
-    opacity: 1;
-}
-
-.time-events-widget__circle-button--right {
-    top: 50%;
-    left: 100%;
-}
-
-.time-events-widget__circle-button--top-right {
-    top: 93.3%;
-    left: 75%;
-}
-
-.time-events-widget__circle-button--top-left {
-    top: 93.3%;
-    left: 25%;
-}
-
-.time-events-widget__circle-button--left {
-    top: 50%;
-    left: 0%;
-}
-
-.time-events-widget__circle-button--bottom-left {
-    top: 6.7%;
-    left: 25%;
-}
-
-.time-events-widget__circle-button--bottom-right {
-    top: 6.7%;
-    left: 75%;
+.time-events-widget__circle-button-number {
+    clip-path: circle(3px);
+    transition: clip-path calc(var(--animation-duration) / 2) ease;
 }
 
 .time-events-widget__circle-button-label {
     position: absolute;
     font-weight: bold;
-    font-size: 20px;
     line-height: 30px;
     left: 50%;
-    transform: translateX(-50%) translateX(75px);
+    margin-left: calc(var(--circle-button-diameter-large) / 2 + 15px);
+    opacity: 0;
+    transition: opacity calc(var(--animation-duration) / 2) ease;
 }
 
 .time-events-widget__segments-carousel-buttons {
-    margin-top: 98px;
-    margin-left: 79px;
+    position: relative;
+    align-self: start;
+    left: 81px;
+    bottom: 49px;
     font-size: 14px;
 }
 
 .time-events-widget__segments-carousel-button {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: var(--segments-carousel-button-diameter);
+    height: var(--segments-carousel-button-diameter);
     margin-top: 21px;
     background-color: transparent;
     border-radius: 50%;
@@ -180,28 +166,33 @@
 }
 
 .time-events-widget__segments-carousel-button_prev {
-    margin-right: 20px;
+    margin-right: 16px;
 }
 
-.time-events-widget__events-carousel {
-    position: relative;
+.time-events-widget__events-carousel.swiper-wrapper {
+    height: 245px;
 }
 
-.time-events-widget__events-list {
+.time-events-widget__events-wrapper.swiper-slide {
+    padding-top: 6px;
+}
+
+.swiper-wrapper.time-events-widget__events-list {
     display: flex;
     gap: 80px;
-    margin: 56px 80px 0;
+    width: calc(100% - 160px);
+    margin: 0 80px;
     overflow: hidden;
 }
 
-.time-events-widget__event-item {
+.time-events-widget__event-item.swiper-slide {
     width: 320px;
     flex-shrink: 0;
 }
 
 .time-events-widget__event-title {
     color: #3877ee;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: $font-family-accent;
     font-size: 25px;
     line-height: 120%;
     margin-bottom: 15px;
@@ -209,15 +200,15 @@
 
 .time-events-widget__event-text {
     font-size: 20px;
-    color: #42567a;
+    color: $color-primary;
     line-height: 30px;
 }
 
 .time-events-widget__events-carousel-button {
     position: absolute;
     top: 63px;
-    width: 40px;
-    height: 40px;
+    width: var(--events-carousel-button-diameter);
+    height: var(--events-carousel-button-diameter);
     border-radius: 50%;
     background-color: white;
     box-shadow: 0px 0px 15px 0px rgba(56, 119, 238, 0.1);

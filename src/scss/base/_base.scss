@@ -1,3 +1,6 @@
+@forward 'variables';
+@use 'variables' as *;
+
 @font-face {
     font-family: 'PT Sans';
     src: url('/src/fonts/pt-sans_regular.woff') format('woff'),
@@ -20,12 +23,21 @@
         url('/src/fonts/BebasNeue-Regular.woff2') format('woff2');
 }
 
+:root {
+    --circle-diameter: 530px;
+    --circle-button-diameter-small: 6px;
+    --circle-button-diameter-large: 56px;
+    --segments-carousel-button-diameter: 50px;
+    --events-carousel-button-diameter: 40px;
+    --animation-duration: 0.6s;
+}
+
 * {
-    font-family: 'PT Sans', sans-serif;
+    font-family: $font-family-base;
 }
 
 body {
-    background-color: #f4f5f9;
+    background-color: $color-background-light;
 }
 
 button {
