@@ -4,6 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+import { animateSlideChange } from './animations/slideAnimation';
 import { initCircleWidget } from './animations/circleWidget';
 
 export function initTimeEventsWidget() {
@@ -44,19 +45,15 @@ export function initTimeEventsWidget() {
     }
 
     const rootStyles = getComputedStyle(document.documentElement);
-    const durationStr = rootStyles.getPropertyValue(
-        '--animation-duration'
-    );
-    const duration = parseFloat(durationStr);
+    const duration =
+        parseFloat(
+            rootStyles.getPropertyValue('--animation-duration')
+        ) || 0;
 
     const swiper = new Swiper(swiperContainerNode, {
         modules: [Navigation, Pagination],
         loop: false,
         slidesPerView: 1,
-        navigation: {
-            nextEl: nextBtnNode,
-            prevEl: prevBtnNode,
-        },
         pagination: {
             el: paginationNode,
             type: 'fraction',
@@ -65,6 +62,22 @@ export function initTimeEventsWidget() {
         },
     });
 
+    let currentIndex = swiper.realIndex;
+
+    prevBtnNode.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            animateToIndex(currentIndex - 1);
+        }
+    });
+    nextBtnNode.addEventListener('click', () => {
+        if (currentIndex < swiper.slides.length - 1) {
+            animateToIndex(currentIndex + 1);
+        }
+    });
+
+    const currentSlideNumberNode = paginationNode.querySelector(
+        '.swiper-pagination-current'
+    );
     const slideThemes = Array.from(swiper.slides)
         .map((slide) => slide.getAttribute('data-theme') || '')
         .filter((theme) => theme !== '');
@@ -72,13 +85,35 @@ export function initTimeEventsWidget() {
     const circleWidget = initCircleWidget({
         circle: circleNode,
         themes: slideThemes,
-        duration: duration,
-        onClick: (index) => swiper.slideTo(index),
+        duration,
+        onClick: (index) => animateToIndex(index),
     });
+
+    let isAnimating = false;
+
+    function animateToIndex(targetIndex: number) {
+        if (targetIndex === currentIndex || isAnimating) return;
+
+        isAnimating = true;
+        animateSlideChange(swiper, targetIndex, duration);
+        currentSlideNumberNode.textContent = `0${targetIndex + 1}`;
+        circleWidget.setActiveIndex(targetIndex);
+
+        swiper.once('slideChangeTransitionEnd', () => {
+            currentIndex = targetIndex;
+            isAnimating = false;
+        });
+
+        setTimeout(() => {
+            isAnimating = false;
+        }, duration * 1000);
+    }
 
     swiper.on('slideChange', () => {
-        circleWidget.setActiveIndex(swiper.realIndex);
+        currentIndex = swiper.realIndex;
+        circleWidget.setActiveIndex(currentIndex);
     });
 
-    circleWidget.setActiveIndex(swiper.realIndex);
+    circleWidget.setActiveIndex(currentIndex);
+    swiper.slideTo(currentIndex, 0, false);
 }
