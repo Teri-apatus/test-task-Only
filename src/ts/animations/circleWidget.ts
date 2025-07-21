@@ -57,7 +57,7 @@ export function initCircleWidget({
     let currentTimeline: gsap.core.Timeline | null = null;
     let currentIndex = 0;
 
-    function animateToIndex(targetIndex: number) {
+    function animateCircleToIndex(targetIndex: number) {
         if (currentTimeline) {
             currentTimeline.kill();
             currentTimeline = null;
@@ -65,7 +65,6 @@ export function initCircleWidget({
         currentIndex = targetIndex;
 
         const rotation = -stepAngleDeg * targetIndex;
-        console.log(stepAngleDeg);
 
         currentTimeline = gsap.timeline({
             defaults: {
@@ -107,14 +106,14 @@ export function initCircleWidget({
     buttons.forEach((btn, i) => {
         btn.addEventListener('click', () => {
             onClick(i);
-            animateToIndex(i);
+            animateCircleToIndex(i);
         });
     });
 
     positionButtons();
-    animateToIndex(0);
+    animateCircleToIndex(0);
 
     return {
-        setActiveIndex: animateToIndex,
+        setActiveIndex: animateCircleToIndex,
     };
 }
