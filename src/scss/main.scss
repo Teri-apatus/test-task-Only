@@ -163,6 +163,11 @@
     border-radius: 50%;
     border: 1px solid #42567a80;
     line-height: 0;
+
+    &:hover,
+    &:active {
+        background-color: white;
+    }
 }
 
 .time-events-widget__segments-carousel-button_prev {
