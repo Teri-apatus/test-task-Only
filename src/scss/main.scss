@@ -36,10 +36,10 @@
 .time-events-widget__header {
     position: absolute;
     box-sizing: border-box;
-    padding-left: 81px;
     width: 433px;
     height: 134px;
     top: 170px;
+    left: 80px;
 }
 
 .time-events-widget__header::before {
@@ -48,7 +48,7 @@
     width: 5px;
     height: 120px;
     top: 8px;
-    left: 0;
+    left: -80px;
     background-image: linear-gradient(#3877ee, #ef5da8);
 }
 
@@ -60,6 +60,7 @@
 }
 
 .time-events-widget__carousel.swiper {
+    box-sizing: border-box;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -149,7 +150,7 @@
 .time-events-widget__segments-carousel-buttons {
     position: relative;
     align-self: start;
-    left: 81px;
+    margin-left: 80px;
     bottom: 49px;
     font-size: 14px;
 }
@@ -163,36 +164,49 @@
     border-radius: 50%;
     border: 1px solid #42567a80;
     line-height: 0;
+    // opacity: 1;
+
+    &_prev {
+        margin-right: 16px;
+    }
 
     &:hover,
     &:active {
         background-color: white;
     }
+
+    &_prev.swiper-button-disabled,
+    &_next.swiper-button-disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 }
 
-.time-events-widget__segments-carousel-button_prev {
-    margin-right: 16px;
+.time-events-widget__events-carousel.swiper {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-.time-events-widget__events-carousel.swiper-wrapper {
+.time-events-widget__events-lists.swiper-wrapper {
     height: 245px;
+    width: 100%;
 }
 
 .time-events-widget__events-wrapper.swiper-slide {
     padding-top: 6px;
+    display: flex;
 }
 
-.swiper-wrapper.time-events-widget__events-list {
+.time-events-widget__events-list.swiper-wrapper {
     display: flex;
-    gap: 80px;
-    width: calc(100% - 160px);
-    margin: 0 80px;
-    overflow: hidden;
+    cursor: pointer;
 }
 
 .time-events-widget__event-item.swiper-slide {
     width: 320px;
     flex-shrink: 0;
+    user-select: none;
 }
 
 .time-events-widget__event-title {
@@ -210,19 +224,20 @@
 }
 
 .time-events-widget__events-carousel-button {
-    position: absolute;
-    top: 63px;
+    position: relative;
+    margin: 0 20px;
+    transform: translateY(40px);
+    flex-shrink: 0;
     width: var(--events-carousel-button-diameter);
     height: var(--events-carousel-button-diameter);
     border-radius: 50%;
     background-color: white;
     box-shadow: 0px 0px 15px 0px rgba(56, 119, 238, 0.1);
-}
+    pointer-events: auto;
 
-.time-events-widget__events-carousel-button_prev {
-    left: 20px;
-}
-
-.time-events-widget__events-carousel-button_next {
-    right: 20px;
+    &_prev.swiper-button-disabled,
+    &_next.swiper-button-disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
 }

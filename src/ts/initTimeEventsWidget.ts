@@ -7,6 +7,7 @@ import 'swiper/css/pagination';
 import { animateSlideChange } from './animations/slideAnimation';
 import { initCircleWidget } from './animations/circleWidget';
 import { animateYearCounter } from './animations/yearAnimation';
+import { initNestedCarousel } from './animations/nestedCarousel';
 
 export function initTimeEventsWidget() {
     const widgetRootNode = document.querySelector(
@@ -63,6 +64,7 @@ export function initTimeEventsWidget() {
         modules: [Navigation, Pagination],
         loop: false,
         slidesPerView: 1,
+        allowTouchMove: false,
         pagination: {
             el: paginationNode,
             type: 'fraction',
@@ -72,6 +74,14 @@ export function initTimeEventsWidget() {
     });
 
     let currentIndex = swiper.realIndex;
+    let activeSlide = swiper.slides[currentIndex];
+    let currentNestedSwiper: Swiper | null = null;
+
+    currentNestedSwiper = initNestedCarousel(
+        activeSlide,
+        currentNestedSwiper
+    );
+    updateNavButtons();
 
     prevBtnNode.addEventListener('click', () => {
         if (currentIndex > 0) {
@@ -148,9 +158,29 @@ export function initTimeEventsWidget() {
         }, duration * 1000);
     }
 
+    function updateNavButtons() {
+        if (currentIndex === 0) {
+            prevBtnNode.classList.add('swiper-button-disabled');
+        } else {
+            prevBtnNode.classList.remove('swiper-button-disabled');
+        }
+
+        if (currentIndex === swiper.slides.length - 1) {
+            nextBtnNode.classList.add('swiper-button-disabled');
+        } else {
+            nextBtnNode.classList.remove('swiper-button-disabled');
+        }
+    }
+
     swiper.on('slideChange', () => {
         currentIndex = swiper.realIndex;
+        activeSlide = swiper.slides[currentIndex];
         circleWidget.setActiveIndex(currentIndex);
+        currentNestedSwiper = initNestedCarousel(
+            activeSlide,
+            currentNestedSwiper
+        );
+        updateNavButtons();
     });
 
     circleWidget.setActiveIndex(currentIndex);
