@@ -13,17 +13,18 @@ export function initCircleWidget({
 }): {
     setActiveIndex: (targetIndex: number) => void;
 } {
-    circle.innerHTML = '';
+    circle.innerHTML = circle.innerHTML;
 
     const buttons: HTMLElement[] = themes.map((theme, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.classList.add('time-events-widget__circle-button');
-        btn.innerHTML = `<p><span class="time-events-widget__circle-button-number">${
+        btn.classList.add('carousel-widget__circle-button');
+        btn.innerHTML = `<p><span class="carousel-widget__circle-button-number">${
             i + 1
         }</span>
-        <span class="time-events-widget__circle-button-label">${theme}</span></p>`;
+        <span class="carousel-widget__circle-button-label">${theme}</span></p>`;
         circle.appendChild(btn);
+
         return btn;
     });
 
@@ -82,13 +83,11 @@ export function initCircleWidget({
                         circle,
                         'rotation'
                     ) as number;
-                    buttons.forEach((btn) => {
-                        const text = btn.querySelector('p');
-                        if (text) {
-                            gsap.set(text, {
-                                rotation: -currentRotation,
-                            });
-                        }
+
+                    circle.querySelectorAll('p').forEach((p) => {
+                        gsap.set(p, {
+                            rotation: -currentRotation,
+                        });
                     });
                 },
             },
@@ -97,7 +96,7 @@ export function initCircleWidget({
 
         buttons.forEach((btn, i) => {
             btn.classList.toggle(
-                'time-events-widget__circle-button--active',
+                'carousel-widget__circle-button--active',
                 i === targetIndex
             );
         });

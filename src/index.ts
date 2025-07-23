@@ -1,6 +1,6 @@
 import './scss/main.scss';
-import { initTimeEventsWidget } from './ts/initTimeEventsWidget';
+import { initCarouselWidget } from './ts/initCarouselWidget';
 
 document.addEventListener('DOMContentLoaded', () =>
-    initTimeEventsWidget()
+    initCarouselWidget()
 );
