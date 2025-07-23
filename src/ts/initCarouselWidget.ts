@@ -9,46 +9,33 @@ import { initCircleWidget } from './animations/circleWidget';
 import { animateYearCounter } from './animations/yearAnimation';
 import { initNestedCarousel } from './animations/nestedCarousel';
 
-export function initTimeEventsWidget() {
-    const widgetRootNode = document.querySelector(
-        '.time-events-widget'
+export function initCarouselWidget() {
+    const widgetRootNode = document.querySelector<HTMLElement>(
+        '.carousel-widget.swiper'
     );
     if (!widgetRootNode) {
-        console.warn('Блок time-events-widget не найден на странице');
+        console.warn('Блок carousel-widget не найден на странице');
         return;
     }
 
     const circleNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__circle'
+        '.carousel-widget__circle'
     );
-    const swiperContainerNode =
-        widgetRootNode.querySelector<HTMLElement>(
-            '.time-events-widget__carousel.swiper'
-        );
     const prevBtnNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__segments-carousel-button_prev'
+        '.carousel-widget__navigation-button--prev'
     );
     const nextBtnNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__segments-carousel-button_next'
+        '.carousel-widget__navigation-button--next'
     );
     const paginationNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__pagination'
-    );
-    const yearStartNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__year-start'
-    );
-    const yearEndNode = widgetRootNode.querySelector<HTMLElement>(
-        '.time-events-widget__year-end'
+        '.carousel-widget__pagination'
     );
 
     if (
         !circleNode ||
-        !swiperContainerNode ||
         !prevBtnNode ||
         !nextBtnNode ||
-        !paginationNode ||
-        !yearStartNode ||
-        !yearEndNode
+        !paginationNode
     ) {
         console.warn('Не все необходимые элементы найдены');
         return;
@@ -60,7 +47,7 @@ export function initTimeEventsWidget() {
             rootStyles.getPropertyValue('--animation-duration')
         ) || 0;
 
-    const swiper = new Swiper(swiperContainerNode, {
+    const swiper = new Swiper(widgetRootNode, {
         modules: [Navigation, Pagination],
         loop: false,
         slidesPerView: 1,
@@ -99,13 +86,13 @@ export function initTimeEventsWidget() {
     );
     const eventsListsNode = Array.from(
         widgetRootNode.querySelectorAll<HTMLElement>(
-            '.time-events-widget__events-list'
+            '.carousel-widget__nested-carousel-list'
         )
     );
     const yearIntervals = eventsListsNode.map((eventsList) => {
         const titles = Array.from(
             eventsList.querySelectorAll<HTMLElement>(
-                '.time-events-widget__event-title'
+                '.carousel-widget__nested-carousel-slide-title'
             )
         );
         const start = parseFloat(titles[0].textContent);
@@ -123,6 +110,13 @@ export function initTimeEventsWidget() {
         duration,
         onClick: (index) => animateToIndex(index),
     });
+
+    const yearStartNode = widgetRootNode.querySelector<HTMLElement>(
+        '.carousel-widget__year-start'
+    );
+    const yearEndNode = widgetRootNode.querySelector<HTMLElement>(
+        '.carousel-widget__year-end'
+    );
 
     let isAnimating = false;
 

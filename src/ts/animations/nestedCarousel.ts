@@ -12,13 +12,13 @@ export function initNestedCarousel(
     }
 
     const nestedCarousel = activeSlide.querySelector<HTMLElement>(
-        '.time-events-widget__events-carousel.swiper'
+        '.carousel-widget__nested-carousel.swiper'
     );
     const prevBtn = activeSlide.querySelector<HTMLElement>(
-        '.time-events-widget__events-carousel-button_prev'
+        '.carousel-widget__nested-carousel-navigation-button--prev'
     );
     const nextBtn = activeSlide.querySelector<HTMLElement>(
-        '.time-events-widget__events-carousel-button_next'
+        '.carousel-widget__nested-carousel-navigation-button--next'
     );
 
     const swiper = new Swiper(nestedCarousel, {
