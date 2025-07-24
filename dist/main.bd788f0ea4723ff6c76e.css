@@ -45,6 +45,7 @@ ul {
   --circle-button-diameter-large: 56px;
   --segments-carousel-button-diameter: 50px;
   --events-carousel-button-diameter: 40px;
+  --animation-duration: 0.6s;
 }
 
 * {
@@ -72,69 +73,16 @@ button {
           user-select: none;
 }
 
-.time-events-widget {
+.carousel-widget.swiper {
   overflow: hidden;
   position: relative;
-  margin-left: 320px;
-  margin-right: 160px;
+  margin: 0 auto;
   width: 1440px;
-  height: 1080px;
+  height: 100%;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-left: 1px solid rgba(66, 86, 122, 0.1019607843);
   border-right: 1px solid rgba(66, 86, 122, 0.1019607843);
-}
-
-.time-events-widget::before {
-  content: "";
-  position: absolute;
-  top: 44.44%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: rgba(66, 86, 122, 0.1019607843);
-}
-
-.time-events-widget::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background-color: rgba(66, 86, 122, 0.1019607843);
-}
-
-.time-events-widget__header {
-  position: absolute;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  padding-left: 81px;
-  width: 433px;
-  height: 134px;
-  top: 170px;
-}
-
-.time-events-widget__header::before {
-  content: "";
-  position: absolute;
-  width: 5px;
-  height: 120px;
-  top: 8px;
-  left: 0;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#3877ee), to(#ef5da8));
-  background-image: linear-gradient(#3877ee, #ef5da8);
-}
-
-.time-events-widget__title {
-  font-weight: bold;
-  font-size: 56px;
-  color: #42567a;
-  line-height: 1.2;
-}
-
-.time-events-widget__carousel.swiper {
-  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -148,38 +96,59 @@ button {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: end;
-  width: 100%;
-  height: 100%;
 }
-
-.time-events-widget__years {
+.carousel-widget.swiper::after {
+  content: "";
   position: absolute;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  gap: 93px;
-  font-weight: bold;
-  font-size: 200px;
-  margin-right: 34px;
-  letter-spacing: -0.02em;
-  top: 339px;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(66, 86, 122, 0.1019607843);
+}
+.carousel-widget.swiper::before {
+  content: "";
+  position: absolute;
+  top: 44.44%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(66, 86, 122, 0.1019607843);
 }
 
-.time-events-widget__year-start {
-  color: #5d5fef;
-}
-
-.time-events-widget__year-end {
-  color: #ef5da8;
-}
-
-.time-events-widget__circle {
-  position: relative;
+.carousel-widget__header {
+  position: absolute;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  width: 433px;
+  height: 134px;
+  top: 170px;
+  left: 80px;
+}
+
+.carousel-widget__header::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 120px;
+  top: 8px;
+  left: -80px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#3877ee), to(#ef5da8));
+  background-image: linear-gradient(#3877ee, #ef5da8);
+}
+
+.carousel-widget__title {
+  font-weight: bold;
+  font-size: 56px;
+  color: #42567a;
+  line-height: 1.2;
+}
+
+.carousel-widget__circle {
+  position: absolute;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  top: 44.44%;
   width: 530px;
   width: var(--circle-diameter);
   height: 530px;
@@ -187,9 +156,11 @@ button {
   border-radius: 50%;
   border: 1px solid rgba(66, 86, 122, 0.2);
   z-index: 1;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
-.time-events-widget__circle-button {
+.carousel-widget__circle-button {
   font-size: 20px;
   position: absolute;
   width: 6px;
@@ -202,10 +173,12 @@ button {
   background-color: #42567a;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  -webkit-transition: background-color 0.4s ease, width 0.4s ease, height 0.4s ease, border-color 0.4s ease;
-  transition: background-color 0.4s ease, width 0.4s ease, height 0.4s ease, border-color 0.4s ease;
+  -webkit-transition: all calc(0.6s / 2) ease;
+  transition: all calc(0.6s / 2) ease;
+  -webkit-transition: all calc(var(--animation-duration) / 2) ease;
+  transition: all calc(var(--animation-duration) / 2) ease;
 }
-.time-events-widget__circle-button:hover, .time-events-widget__circle-button--active {
+.carousel-widget__circle-button:hover, .carousel-widget__circle-button--active {
   width: 56px;
   width: var(--circle-button-diameter-large);
   height: 56px;
@@ -213,41 +186,76 @@ button {
   opacity: 1;
   background-color: #f4f5f9;
 }
-.time-events-widget__circle-button--active .time-events-widget__circle-button-label {
-  opacity: 1;
-}
-.time-events-widget__circle-button:hover .time-events-widget__circle-button-number {
+.carousel-widget__circle-button:hover .carousel-widget__circle-button-number, .carousel-widget__circle-button--active .carousel-widget__circle-button-number {
   clip-path: circle(28px);
 }
-
-.time-events-widget__circle-button-number {
-  clip-path: circle(3px);
-  -webkit-transition: clip-path 0.4s ease;
-  transition: clip-path 0.4s ease;
+.carousel-widget__circle-button--active .carousel-widget__circle-button-label {
+  -webkit-transition: opacity 0.1s ease 0.6s;
+  transition: opacity 0.1s ease 0.6s;
+  -webkit-transition: opacity 0.1s ease var(--animation-duration);
+  transition: opacity 0.1s ease var(--animation-duration);
+  opacity: 1;
 }
 
-.time-events-widget__circle-button-label {
+.carousel-widget__circle-button-number {
+  clip-path: circle(3px);
+  -webkit-transition: clip-path calc(0.6s / 2) ease;
+  transition: clip-path calc(0.6s / 2) ease;
+  -webkit-transition: clip-path calc(var(--animation-duration) / 2) ease;
+  transition: clip-path calc(var(--animation-duration) / 2) ease;
+}
+
+.carousel-widget__circle-button-label {
   position: absolute;
   font-weight: bold;
   line-height: 30px;
   left: 50%;
-  -webkit-transform: translateX(41px);
-          transform: translateX(41px);
+  margin-left: calc(56px / 2 + 15px);
+  margin-left: calc(var(--circle-button-diameter-large) / 2 + 15px);
   opacity: 0;
-  -webkit-transition: opacity 0.4s ease;
-  transition: opacity 0.4s ease;
+  -webkit-transition: opacity calc(0.6s / 2) ease;
+  transition: opacity calc(0.6s / 2) ease;
+  -webkit-transition: opacity calc(var(--animation-duration) / 2) ease;
+  transition: opacity calc(var(--animation-duration) / 2) ease;
 }
 
-.time-events-widget__segments-carousel-buttons {
+.carousel-widget__years {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 93px;
+  font-weight: bold;
+  font-size: 200px;
+  margin-right: 34px;
+  letter-spacing: -0.02em;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  left: 50%;
+}
+
+.carousel-widget__year-start {
+  color: #5d5fef;
+}
+
+.carousel-widget__year-end {
+  color: #ef5da8;
+}
+
+.carousel-widget__navigation-buttons {
   position: relative;
   -ms-flex-item-align: start;
       align-self: start;
-  left: 81px;
+  margin-left: 80px;
   bottom: 49px;
   font-size: 14px;
 }
 
-.time-events-widget__segments-carousel-button {
+.carousel-widget__navigation-button {
   position: relative;
   width: 50px;
   width: var(--segments-carousel-button-diameter);
@@ -259,36 +267,53 @@ button {
   border: 1px solid rgba(66, 86, 122, 0.5019607843);
   line-height: 0;
 }
-
-.time-events-widget__segments-carousel-button_prev {
+.carousel-widget__navigation-button--prev {
   margin-right: 16px;
 }
+.carousel-widget__navigation-button:hover, .carousel-widget__navigation-button:active {
+  background-color: white;
+}
+.carousel-widget__navigation-button--prev.swiper-button-disabled, .carousel-widget__navigation-button--next.swiper-button-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 
-.time-events-widget__events-carousel.swiper-wrapper {
+.carousel-widget__slides-wrapper.swiper-wrapper {
   height: 245px;
+  width: 100%;
 }
 
-.time-events-widget__events-wrapper.swiper-slide {
+.carousel-widget__slide.swiper-slide {
   padding-top: 6px;
-}
-
-.swiper-wrapper.time-events-widget__events-list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 80px;
-  width: calc(100% - 160px);
-  margin: 0 80px;
-  overflow: hidden;
 }
 
-.time-events-widget__event-item.swiper-slide {
+.carousel-widget__nested-carousel.swiper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-widget__nested-carousel-list.swiper-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+}
+
+.carousel-widget__nested-carousel-slide.swiper-slide {
   width: 320px;
   -ms-flex-negative: 0;
       flex-shrink: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
-.time-events-widget__event-title {
+.carousel-widget__nested-carousel-slide-title {
   color: #3877ee;
   font-family: "Bebas Neue", sans-serif;
   font-size: 25px;
@@ -296,15 +321,19 @@ button {
   margin-bottom: 15px;
 }
 
-.time-events-widget__event-text {
+.carousel-widget__nested-carousel-slide-text {
   font-size: 20px;
   color: #42567a;
   line-height: 30px;
 }
 
-.time-events-widget__events-carousel-button {
-  position: absolute;
-  top: 63px;
+.carousel-widget__nested-carousel-navigation-button {
+  position: relative;
+  margin: 0 20px;
+  -webkit-transform: translateY(40px);
+          transform: translateY(40px);
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   width: 40px;
   width: var(--events-carousel-button-diameter);
   height: 40px;
@@ -313,14 +342,11 @@ button {
   background-color: white;
   -webkit-box-shadow: 0px 0px 15px 0px rgba(56, 119, 238, 0.1);
           box-shadow: 0px 0px 15px 0px rgba(56, 119, 238, 0.1);
+  pointer-events: auto;
 }
-
-.time-events-widget__events-carousel-button_prev {
-  left: 20px;
-}
-
-.time-events-widget__events-carousel-button_next {
-  right: 20px;
+.carousel-widget__nested-carousel-navigation-button--prev.swiper-button-disabled, .carousel-widget__nested-carousel-navigation-button--next.swiper-button-disabled {
+  opacity: 0;
+  pointer-events: none;
 }
 /*!*******************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/swiper/swiper.css ***!

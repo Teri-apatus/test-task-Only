@@ -13,7 +13,7 @@ export function initCircleWidget({
 }): {
     setActiveIndex: (targetIndex: number) => void;
 } {
-    circle.innerHTML = circle.innerHTML;
+    circle.innerHTML = '';
 
     const buttons: HTMLElement[] = themes.map((theme, i) => {
         const btn = document.createElement('button');
@@ -33,66 +33,72 @@ export function initCircleWidget({
     const vertexShiftAngle = stepAngleDeg / 2;
 
     function positionButtons() {
-        const computedStyle = getComputedStyle(circle);
-        const diameter = parseFloat(
-            computedStyle.getPropertyValue('--circle-diameter')
-        );
-        const radius = diameter / 2;
-        const centerX = circle.clientWidth / 2;
-        const centerY = circle.clientHeight / 2;
+        if (window.innerWidth >= 762) {
+            const diameter = circle.offsetWidth;
+            const radius = diameter / 2;
+            const centerX = circle.clientWidth / 2;
+            const centerY = circle.clientHeight / 2;
 
-        buttons.forEach((btn, i) => {
-            const angleRad =
-                ((stepAngleDeg * i - 90 + vertexShiftAngle) *
-                    Math.PI) /
-                180;
+            buttons.forEach((btn, i) => {
+                const angleRad =
+                    ((stepAngleDeg * i - 90 + vertexShiftAngle) *
+                        Math.PI) /
+                    180;
 
-            const x = centerX + radius * Math.cos(angleRad);
-            const y = centerY + radius * Math.sin(angleRad);
+                const x = centerX + radius * Math.cos(angleRad);
+                const y = centerY + radius * Math.sin(angleRad);
 
-            btn.style.left = `${x}px`;
-            btn.style.top = `${y}px`;
-        });
+                btn.style.left = `${x}px`;
+                btn.style.top = `${y}px`;
+            });
+        }
     }
 
     let currentTimeline: gsap.core.Timeline | null = null;
     let currentIndex = 0;
 
     function animateCircleToIndex(targetIndex: number) {
+        currentIndex = targetIndex;
+
         if (currentTimeline) {
             currentTimeline.kill();
             currentTimeline = null;
         }
-        currentIndex = targetIndex;
 
-        const rotation = -stepAngleDeg * targetIndex;
+        if (window.innerWidth >= 762) {
+            const rotation = -stepAngleDeg * targetIndex;
 
-        currentTimeline = gsap.timeline({
-            defaults: {
-                duration,
-                ease: 'power1.out',
-            },
-        });
-
-        currentTimeline.to(
-            circle,
-            {
-                rotation,
-                onUpdate() {
-                    const currentRotation = gsap.getProperty(
-                        circle,
-                        'rotation'
-                    ) as number;
-
-                    circle.querySelectorAll('p').forEach((p) => {
-                        gsap.set(p, {
-                            rotation: -currentRotation,
-                        });
-                    });
+            currentTimeline = gsap.timeline({
+                defaults: {
+                    duration,
+                    ease: 'power1.out',
                 },
-            },
-            0
-        );
+            });
+
+            currentTimeline.to(
+                circle,
+                {
+                    rotation,
+                    onUpdate() {
+                        const currentRotation = gsap.getProperty(
+                            circle,
+                            'rotation'
+                        ) as number;
+                        circle.style.setProperty(
+                            '--axis-rotation',
+                            `${-currentRotation}deg`
+                        );
+
+                        circle.querySelectorAll('p').forEach((p) => {
+                            gsap.set(p, {
+                                rotation: -currentRotation,
+                            });
+                        });
+                    },
+                },
+                0
+            );
+        }
 
         buttons.forEach((btn, i) => {
             btn.classList.toggle(
@@ -111,6 +117,11 @@ export function initCircleWidget({
 
     positionButtons();
     animateCircleToIndex(0);
+
+    window.addEventListener('resize', () => {
+        positionButtons();
+        animateCircleToIndex(currentIndex);
+    });
 
     return {
         setActiveIndex: animateCircleToIndex,
