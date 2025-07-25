@@ -2,10 +2,12 @@
 @use 'base/base' as *;
 
 .carousel-widget.swiper {
-    overflow: hidden;
+    // overflow: hidden;
     position: relative;
     margin: 0 auto;
-    width: min(80%, 1440px);
+    // width: min(80%, 1440px);
+    // max-width: 1440px;
+    width: 80%;
     height: 100%;
     box-sizing: border-box;
     border-left: 1px solid $color-primary-transparent;
@@ -30,6 +32,7 @@
 
     @media (max-width: 991px) {
         width: 100%;
+        margin: 0;
         justify-content: space-between;
         padding: 38px 0 13px;
     }
@@ -270,7 +273,7 @@
 }
 
 .carousel-widget__slides-wrapper.swiper-wrapper {
-    height: 120px;
+    height: auto;
 }
 
 .carousel-widget__slide.swiper-slide {
