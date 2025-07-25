@@ -20,7 +20,9 @@ export function initNestedCarousel(
     const nextBtn = activeSlide.querySelector<HTMLElement>(
         '.carousel-widget__nested-carousel-navigation-button--next'
     );
-
+    const computedStyle = getComputedStyle(prevBtn);
+    const margin = parseFloat(computedStyle.marginLeft) * 4;
+    console.log(margin);
     const swiper = new Swiper(nestedCarousel, {
         modules: [Navigation],
         slidesPerView: 'auto',
@@ -29,7 +31,17 @@ export function initNestedCarousel(
             prevEl: prevBtn,
             nextEl: nextBtn,
         },
-        spaceBetween: 80,
+
+        breakpoints: {
+            0: {
+                spaceBetween: 25,
+                slidesOffsetBefore: margin,
+                slidesOffsetAfter: 55,
+            },
+            768: {
+                spaceBetween: 80,
+            },
+        },
         watchOverflow: true,
     });
 

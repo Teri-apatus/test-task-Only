@@ -31,22 +31,16 @@ export function initCarouselWidget() {
         '.carousel-widget__pagination'
     );
 
-    if (
-        !circleNode ||
-        !prevBtnNode ||
-        !nextBtnNode ||
-        !paginationNode
-    ) {
+    if (!circleNode || !paginationNode) {
         console.warn('Не все необходимые элементы найдены');
         return;
     }
 
     const rootStyles = getComputedStyle(document.documentElement);
-    const duration =
+    const duration: number =
         parseFloat(
             rootStyles.getPropertyValue('--animation-duration')
         ) || 0;
-
     const swiper = new Swiper(widgetRootNode, {
         modules: [Navigation, Pagination],
         loop: false,
@@ -55,6 +49,12 @@ export function initCarouselWidget() {
         pagination: {
             el: paginationNode,
             type: 'fraction',
+            renderFraction: (
+                currentClass: string,
+                totalClass: string
+            ) => {
+                return `<span class="${currentClass}"></span>/<span class="${totalClass}"></span>`;
+            },
             formatFractionCurrent: (number) => `0${number}`,
             formatFractionTotal: (number) => `0${number}`,
         },
